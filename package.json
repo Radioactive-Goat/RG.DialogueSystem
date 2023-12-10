@@ -1,0 +1,20 @@
+{
+  "name": "com.radioactivegoat.dialoguesystem",
+  "version": "0.1.0",
+  "displayName": "RG.DialogueSystem",
+  "description": "Generic Dialogue System",
+  "unity": "2022.3",
+  "documentationUrl": "",
+  "licensesUrl": "https://raw.githubusercontent.com/Radioactive-Goat/RG.DialogueSystem/master/LICENSE.md",
+  "keywords": [
+    "Dialogue",
+    "Dialogue System",
+    "2D Conversation",
+    "Type Writer"
+  ],
+  "author": {
+    "name": "Radioactive Goat",
+    "email": "radioactivegoatstudios@gmail.com",
+    "url": "https://radioactivegoat.github.io"
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "com.radioactivegoat.dialoguesystem",
+    "rootNamespace": "RG.DialogueSystem",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
