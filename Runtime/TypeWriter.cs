@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 namespace RG.DialogueSystem
 {
@@ -14,13 +16,14 @@ namespace RG.DialogueSystem
         [SerializeField] [Range(0.01f, 1f)]
         private float _timeGapBetweenLetters = 0.05f;
         public Action<string/*newTextValue*/> OnTextUpdated;
+        public Action OnTypingComplete;
         public bool IsTyping { get; private set; }
 
         private float _defaultTypingSpeed;
         private int _timeGapInMs;
         private string _textToTypeOut, _currentlyTypedOutText;
-        //private Coroutine _typeWriteEffectCoroutine;
         private Task _typeWriteEffectTask;
+        private CancellationTokenSource _cancellationTokenSource;
 
         private void Start()
         {
@@ -31,47 +34,60 @@ namespace RG.DialogueSystem
 
         private void OnDestroy()
         {
-            //_typeWriteEffectTask.Dispose();
+            _cancellationTokenSource.Cancel();
         }
 
         public void StartTypeWriter(string textToType)
         {
             StopTypeWriter();
 
+            _cancellationTokenSource = new CancellationTokenSource();
             _textToTypeOut = textToType;
             _currentlyTypedOutText = "";
-            _typeWriteEffectTask = TypeWriteEffect();
+            _typeWriteEffectTask = TypeWriteEffect(_cancellationTokenSource.Token);
         }
 
-        public void StopTypeWriter()
-        {
-            if (_typeWriteEffectTask != null )
-            {
-                //_typeWriteEffectTask.Dispose();
-                IsTyping = false;
-            }
-        }
-
-        public void SkipToEnd()
-        {
-            _currentlyTypedOutText = _textToTypeOut;
-            StopTypeWriter();
-            OnTextUpdated?.Invoke(_currentlyTypedOutText);
-        }
-
-        private async Task TypeWriteEffect()
+        private async Task TypeWriteEffect(CancellationToken cancellationToken)
         {
             _currentlyTypedOutText = "";
             IsTyping = true;
             int index = 0;
             while (index < _textToTypeOut.Length)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    goto endItPlease;
+                }
                 _currentlyTypedOutText += _textToTypeOut[index].ToString();
                 index++;
-                Debug.Log(_currentlyTypedOutText);
+                //Debug.Log(_currentlyTypedOutText);
                 await Task.Delay(_timeGapInMs);
             }
             IsTyping = false;
+            OnTypingComplete?.Invoke();
+
+        endItPlease:;
+            _typeWriteEffectTask = null;
+        }
+
+        public void SkipToEnd()
+        {
+            if(IsTyping)
+            {
+                StopTypeWriter();
+                _currentlyTypedOutText = _textToTypeOut;
+                OnTextUpdated?.Invoke(_currentlyTypedOutText);
+                OnTypingComplete?.Invoke();
+            }
+        }
+
+        public void StopTypeWriter()
+        {
+            if (_typeWriteEffectTask != null)
+            {
+                _cancellationTokenSource.Cancel();
+                IsTyping = false;
+            }
         }
 
         public void UpdateTimeGapBetweenLetters(float newTimeGap)
