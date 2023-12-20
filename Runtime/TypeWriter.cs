@@ -11,12 +11,23 @@ namespace RG.DialogueSystem
 {
     public class TypeWriter : MonoBehaviour
     {
-        [SerializeField] [TextArea(2, 3)]
-        private string testingStr;
+        public static TypeWriter Instance;
+        private void Awake()
+        {
+            if(Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+
         [SerializeField] [Range(0.01f, 1f)]
         private float _timeGapBetweenLetters = 0.05f;
         public Action<string/*newTextValue*/> OnTextUpdated;
-        public Action OnTypingComplete;
+        public Action OnStartTyping, OnTypingComplete;
         public bool IsTyping { get; private set; }
 
         private float _defaultTypingSpeed;
@@ -29,7 +40,6 @@ namespace RG.DialogueSystem
         {
             _defaultTypingSpeed = _timeGapBetweenLetters;
             _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
-            StartTypeWriter(testingStr);
         }
 
         private void OnDestroy()
@@ -45,6 +55,7 @@ namespace RG.DialogueSystem
             _textToTypeOut = textToType;
             _currentlyTypedOutText = "";
             _typeWriteEffectTask = TypeWriteEffect(_cancellationTokenSource.Token);
+            OnStartTyping?.Invoke();
         }
 
         private async Task TypeWriteEffect(CancellationToken cancellationToken)
@@ -59,8 +70,8 @@ namespace RG.DialogueSystem
                     goto endItPlease;
                 }
                 _currentlyTypedOutText += _textToTypeOut[index].ToString();
+                OnTextUpdated?.Invoke(_currentlyTypedOutText);
                 index++;
-                //Debug.Log(_currentlyTypedOutText);
                 await Task.Delay(_timeGapInMs);
             }
             IsTyping = false;
@@ -112,6 +123,7 @@ namespace RG.DialogueSystem
         public void ReturnToDefaultSpeed()
         {
             _timeGapBetweenLetters = _defaultTypingSpeed;
+            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
         }
     }
 }
