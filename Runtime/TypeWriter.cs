@@ -24,11 +24,38 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// This event will be called after each letter is typed
+        /// strign here is for "newTextValue"
+        /// </summary>
+        public Action<string> OnTextUpdated;
+        /// <summary>
+        /// This event will be called when the type writer starts typing
+        /// </summary>
+        public Action OnStartTyping;
+        /// <summary>
+        /// This event will be called when the type writer finshed tying the string
+        /// </summary>
+        public Action OnTypingComplete;
+        /// <summary>
+        /// Status of the type writer
+        /// </summary>
+        public bool IsTyping { get; private set; }
+
         [SerializeField] [Range(0.01f, 1f)]
         private float _timeGapBetweenLetters = 0.05f;
-        public Action<string/*newTextValue*/> OnTextUpdated;
-        public Action OnStartTyping, OnTypingComplete;
-        public bool IsTyping { get; private set; }
+        private float TimeGapBetweenLetters
+        {
+            get
+            {
+                return _timeGapBetweenLetters;
+            }
+            set
+            {
+                _timeGapBetweenLetters = value;
+                _timeGapInMs = (int)(TimeGapBetweenLetters * 1000);
+            }
+        }
 
         private float _defaultTypingSpeed;
         private int _timeGapInMs;
@@ -38,8 +65,8 @@ namespace RG.DialogueSystem
 
         private void Start()
         {
-            _defaultTypingSpeed = _timeGapBetweenLetters;
-            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
+            _defaultTypingSpeed = TimeGapBetweenLetters;
+            _timeGapInMs = (int)(TimeGapBetweenLetters * 1000);
         }
 
         private void OnDestroy()
@@ -47,11 +74,16 @@ namespace RG.DialogueSystem
             _cancellationTokenSource.Cancel();
         }
 
+        /// <summary>
+        /// Starts the type writer to type out the required text
+        /// </summary>
+        /// <param name="textToType">The text that will be typed</param>
         public void StartTypeWriter(string textToType)
         {
             StopTypeWriter();
 
             _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource.Token.Register(() => _typeWriteEffectTask = null);
             _textToTypeOut = textToType;
             _currentlyTypedOutText = "";
             _typeWriteEffectTask = TypeWriteEffect(_cancellationTokenSource.Token);
@@ -67,7 +99,7 @@ namespace RG.DialogueSystem
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    goto endItPlease;
+                    return;
                 }
                 _currentlyTypedOutText += _textToTypeOut[index].ToString();
                 OnTextUpdated?.Invoke(_currentlyTypedOutText);
@@ -76,11 +108,11 @@ namespace RG.DialogueSystem
             }
             IsTyping = false;
             OnTypingComplete?.Invoke();
-
-        endItPlease:;
-            _typeWriteEffectTask = null;
         }
 
+        /// <summary>
+        /// Completes typing the in progress string 
+        /// </summary>
         public void SkipToEnd()
         {
             if(IsTyping)
@@ -92,6 +124,9 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Force Stops the Type Writer
+        /// </summary>
         public void StopTypeWriter()
         {
             if (_typeWriteEffectTask != null)
@@ -101,29 +136,41 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Updates the default time gap between typing each letter
+        /// </summary>
+        /// <param name="newTimeGap">new time gap</param>
         public void UpdateTimeGapBetweenLetters(float newTimeGap)
         {
-            _timeGapBetweenLetters = newTimeGap;
-            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
+            TimeGapBetweenLetters = newTimeGap;
             _defaultTypingSpeed = newTimeGap;
         }
 
+        /// <summary>
+        /// Speeds up the type writer by setting the gap between typing each letter
+        /// to provided value
+        /// </summary>
+        /// <param name="newtimeGapBetweenLetters">new time gap between typing each letter</param>
         public void SpeedUpWithSetValue(float newtimeGapBetweenLetters)
         {
-            _timeGapBetweenLetters = newtimeGapBetweenLetters;
-            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
+            TimeGapBetweenLetters = newtimeGapBetweenLetters;
         }
 
+        /// <summary>
+        /// Speeds up the type writer by x amount
+        /// </summary>
+        /// <param name="multiplierValue">How much faster/slower should the typing be</param>
         public void SpeedUpWithMultiplier(float multiplierValue)
         {
-            _timeGapBetweenLetters /= multiplierValue;
-            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
+            TimeGapBetweenLetters /= multiplierValue;
         }
 
+        /// <summary>
+        /// Returns to default time gap between typing each letter
+        /// </summary>
         public void ReturnToDefaultSpeed()
         {
-            _timeGapBetweenLetters = _defaultTypingSpeed;
-            _timeGapInMs = (int)(_timeGapBetweenLetters * 1000);
+            TimeGapBetweenLetters = _defaultTypingSpeed;
         }
     }
 }
