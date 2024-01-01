@@ -11,6 +11,7 @@ namespace RG.DialogueSystem
 {
     public class TypeWriter : MonoBehaviour
     {
+        #region Singleton Setup
         public static TypeWriter Instance;
         private void Awake()
         {
@@ -23,6 +24,7 @@ namespace RG.DialogueSystem
                 Destroy(this);
             }
         }
+        #endregion
 
         /// <summary>
         /// This event will be called after each letter is typed

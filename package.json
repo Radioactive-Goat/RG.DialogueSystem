@@ -16,5 +16,8 @@
     "name": "Radioactive Goat",
     "email": "radioactivegoatstudios@gmail.com",
     "url": "https://radioactivegoat.github.io"
+  },
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
   }
 }
