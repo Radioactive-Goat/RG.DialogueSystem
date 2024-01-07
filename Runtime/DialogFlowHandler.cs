@@ -27,6 +27,10 @@ namespace RG.DialogueSystem
         public Action OnCollectionEnded;
         public Action OnForceEnded;
 
+        /// <summary>
+        /// Playes a new dialog chain
+        /// </summary>
+        /// <param name="collection">The collection of dialogs</param>
         public void StartNewDialogChain(DialogCollection collection)
         {
             if(collection.Dialogs.Length == 0)
@@ -44,12 +48,20 @@ namespace RG.DialogueSystem
             TypeWriter.Instance.StartTypeWriter(_currentCollection.Dialogs[_dialogueIndex].Dialogue);
         }
 
+        /// <summary>
+        /// Sets the dialog collection
+        /// </summary>
+        /// <param name="collection">The collection of dialogs</param>
         public void SetDialogCollection(DialogCollection collection)
         {
             _currentCollection = collection;
             _dialogueIndex = 0;
         }
 
+        /// <summary>
+        /// Playes the next dialog in the set dialog chain
+        /// If on last dialoge then invoks the OnCollectionEnded event
+        /// </summary>
         public void NextDialogue()
         {
             if(!TypeWriter.Instance.IsTyping)
@@ -65,6 +77,9 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Forcefully end the dialog string that is being played
+        /// </summary>
         public void ForceEndCollection()
         {
             TypeWriter.Instance.StopTypeWriter();

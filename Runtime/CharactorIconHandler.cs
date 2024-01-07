@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RG.DialogueSystem
 {
+    /// <summary>
+    /// Handles the displaying of the charactor icon
+    /// </summary>
     public class CharactorIconHandler : MonoBehaviour
     {
         [SerializeField] GameObject _characterToDisplay;
@@ -14,7 +17,9 @@ namespace RG.DialogueSystem
         public Action OnCharecterDisplay, OnCharacterHide;
         public Action OnActiveSpeaker, OnActiveListner;
 
-
+        /// <summary>
+        /// Displays the required character on screen
+        /// </summary>
         public void DisplayCharacter()
         {
             foreach (CharactorIconHandler charactorIcon in _charactersWithOverlapPossibility)
@@ -29,6 +34,10 @@ namespace RG.DialogueSystem
             OnCharecterDisplay?.Invoke();
         }
 
+        /// <summary>
+        /// Hides the character on screen
+        /// </summary>
+        /// <param name="invokeHideEvent">If the on hide event should be invoked</param>
         public void HideCharacter(bool invokeHideEvent = true)
         {
             _characterToDisplay.SetActive(false);
@@ -39,6 +48,10 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// If character is being displayed but is not activly speaking
+        /// then invokes the active listner event and adjustes values accordingly
+        /// </summary>
         public void SetAsActiveListner()
         {
             if(IsActiveSpeaker)

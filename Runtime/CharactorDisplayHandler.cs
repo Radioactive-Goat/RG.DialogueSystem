@@ -5,6 +5,10 @@ using TMPro;
 
 namespace RG.DialogueSystem
 {
+    /// <summary>
+    /// Handles the displying and hiding of characters on screen based on 
+    /// dialogs being said
+    /// </summary>
     public class CharactorDisplayHandler : MonoBehaviour
     {
         #region Singleton Setup
@@ -26,6 +30,9 @@ namespace RG.DialogueSystem
         [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] string _nameSuperFix = ":";
 
+        /// <summary>
+        /// This dictionary exist for fast look ups
+        /// </summary>
         private Dictionary<CharactorIdentifier, CharactorData> _allCharactors;
         private CharactorData _currentCharactor;
 
@@ -54,6 +61,10 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Displays the required charactor
+        /// </summary>
+        /// <param name="charactor">The enum identifier of the charactor that needs to be displayed</param>
         public void DisplayCharactor(CharactorIdentifier charactor)
         {
             if(_currentCharactor.CharectorIdentifier != charactor || (_currentCharactor.IconHandler != null && !_currentCharactor.IconHandler.IsActive))
@@ -70,11 +81,19 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Get the charactor data of a specific charactor
+        /// </summary>
+        /// <param name="charactorIdentifier">The enum idntifer of the charactor</param>
+        /// <returns>The required charactor data if exists else will return null</returns>
         public CharactorData GetCharactorData(CharactorIdentifier charactorIdentifier)
         {
             return _allCharactors[charactorIdentifier];
         }
 
+        /// <summary>
+        /// Turnes off the display of all the characters
+        /// </summary>
         public void ResetCharactorDisplays()
         {
             foreach (CharactorData charactor in _allCharactors.Values)

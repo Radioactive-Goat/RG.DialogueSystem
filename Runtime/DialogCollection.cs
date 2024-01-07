@@ -4,12 +4,18 @@ using UnityEngine;
 
 namespace RG.DialogueSystem
 {
+    /// <summary>
+    /// A collestion of dialoges to create a dialog string
+    /// </summary>
     [CreateAssetMenu(fileName = "DialogCollection", menuName = "Dialog System/Dialog Collection")]
     public class DialogCollection : ScriptableObject
     {
         public DialogData[] Dialogs;
     }
 
+    /// <summary>
+    /// Information needed for each dialog
+    /// </summary>
     [System.Serializable ]
     public struct DialogData
     {
