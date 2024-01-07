@@ -73,7 +73,7 @@ namespace RG.DialogueSystem
 
         private void OnDestroy()
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
         }
 
         /// <summary>

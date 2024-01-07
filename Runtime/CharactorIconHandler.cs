@@ -10,7 +10,10 @@ namespace RG.DialogueSystem
         [SerializeField] GameObject _characterToDisplay;
         [SerializeField] CharactorIconHandler[] _charactersWithOverlapPossibility;
         public bool IsActive => _characterToDisplay.activeSelf;
+        public bool IsActiveSpeaker { get; private set; }
         public Action OnCharecterDisplay, OnCharacterHide;
+        public Action OnActiveSpeaker, OnActiveListner;
+
 
         public void DisplayCharacter()
         {
@@ -21,6 +24,7 @@ namespace RG.DialogueSystem
                     charactorIcon.HideCharacter();
                 }
             }
+            SetAsActiveSpeaker();
             _characterToDisplay.SetActive(true);
             OnCharecterDisplay?.Invoke();
         }
@@ -28,9 +32,28 @@ namespace RG.DialogueSystem
         public void HideCharacter(bool invokeHideEvent = true)
         {
             _characterToDisplay.SetActive(false);
+            IsActiveSpeaker = false;
             if(invokeHideEvent)
             {
                 OnCharacterHide?.Invoke();
+            }
+        }
+
+        public void SetAsActiveListner()
+        {
+            if(IsActiveSpeaker)
+            {
+                OnActiveListner?.Invoke();
+                IsActiveSpeaker = false;
+            }
+        }
+
+        private void SetAsActiveSpeaker()
+        {
+            if(!IsActiveSpeaker)
+            {
+                OnActiveSpeaker?.Invoke();
+                IsActiveSpeaker = true;
             }
         }
     }

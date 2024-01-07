@@ -24,29 +24,50 @@ namespace RG.DialogueSystem
 
         [SerializeField] CharactorData[] _allCharactorsData;
         [SerializeField] TextMeshProUGUI _nameText;
+        [SerializeField] string _nameSuperFix = ":";
 
         private Dictionary<CharactorIdentifier, CharactorData> _allCharactors;
+        private CharactorData _currentCharactor;
 
         private void Start()
         {
+            if(_allCharactorsData.Length > 0)
+            {
+                _currentCharactor = _allCharactorsData[0];
+            }
+            else
+            {
+                Debug.LogError("Character list is empty");
+                return;
+            }
+
+
             _allCharactors = new Dictionary<CharactorIdentifier, CharactorData>();
             foreach (CharactorData charectorData in _allCharactorsData)
             {
+                if(_allCharactors.ContainsKey(charectorData.CharectorIdentifier))
+                {
+                    Debug.LogError($"Charcter with name '{charectorData.CharactorName}' is using the same charactor identifier as another charctor");
+                    continue;
+                }
                 _allCharactors[charectorData.CharectorIdentifier] = charectorData;
             }
         }
 
         public void DisplayCharactor(CharactorIdentifier charactor)
         {
-            CharactorData currentCharactor = _allCharactors[charactor];
-            if(currentCharactor == null)
+            if(_currentCharactor.CharectorIdentifier != charactor || !_currentCharactor.IconHandler.IsActive)
             {
-                Debug.LogError($"There is no character data filled in for the identifier ({charactor}) provided");
-                return;
+                _currentCharactor.IconHandler.SetAsActiveListner();
+                _currentCharactor = _allCharactors[charactor];
+                if (_currentCharactor == null)
+                {
+                    Debug.LogError($"There is no character data filled in for the identifier ({charactor}) provided");
+                    return;
+                }
+                _nameText?.SetText($"{_currentCharactor.CharactorName}{_nameSuperFix}");
+                _currentCharactor.IconHandler.DisplayCharacter();
             }
-
-            _nameText?.SetText(currentCharactor.CharactorName);
-            currentCharactor.IconHandler.DisplayCharacter();
         }
 
         public CharactorData GetCharactorData(CharactorIdentifier charactorIdentifier)
@@ -60,6 +81,7 @@ namespace RG.DialogueSystem
             {
                 charactor.IconHandler.HideCharacter(invokeHideEvent: false);
             }
+            _nameText?.SetText("");
         }
     }
 }

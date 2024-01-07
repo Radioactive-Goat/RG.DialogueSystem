@@ -8,7 +8,7 @@ namespace RG.DialogueSystem
     public class DialogFlowHandler : MonoBehaviour
     {
         #region Singleton Setup
-        public DialogFlowHandler Instance;
+        public static DialogFlowHandler Instance;
         private void Awake()
         {
             if(Instance == null)
@@ -29,6 +29,11 @@ namespace RG.DialogueSystem
 
         public void StartNewDialogChain(DialogCollection collection)
         {
+            if(collection.Dialogs.Length == 0)
+            {
+                Debug.LogError($"Collection Passed ({collection.name}) is invald, as the array of dialogs is empty");
+                return;
+            }
             SetDialogCollection(collection);
             StartDialogue();
         }
