@@ -56,9 +56,9 @@ namespace RG.DialogueSystem
 
         public void DisplayCharactor(CharactorIdentifier charactor)
         {
-            if(_currentCharactor.CharectorIdentifier != charactor || !_currentCharactor.IconHandler.IsActive)
+            if(_currentCharactor.CharectorIdentifier != charactor || (_currentCharactor.IconHandler != null && !_currentCharactor.IconHandler.IsActive))
             {
-                _currentCharactor.IconHandler.SetAsActiveListner();
+                _currentCharactor.IconHandler?.SetAsActiveListner();
                 _currentCharactor = _allCharactors[charactor];
                 if (_currentCharactor == null)
                 {
@@ -66,7 +66,7 @@ namespace RG.DialogueSystem
                     return;
                 }
                 _nameText?.SetText($"{_currentCharactor.CharactorName}{_nameSuperFix}");
-                _currentCharactor.IconHandler.DisplayCharacter();
+                _currentCharactor.IconHandler?.DisplayCharacter();
             }
         }
 
@@ -79,7 +79,7 @@ namespace RG.DialogueSystem
         {
             foreach (CharactorData charactor in _allCharactors.Values)
             {
-                charactor.IconHandler.HideCharacter(invokeHideEvent: false);
+                charactor.IconHandler?.HideCharacter(invokeHideEvent: false);
             }
             _nameText?.SetText("");
         }
