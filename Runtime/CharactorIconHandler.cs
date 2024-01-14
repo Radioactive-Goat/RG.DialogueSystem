@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RG.DialogueSystem
 {
@@ -14,8 +14,8 @@ namespace RG.DialogueSystem
         [SerializeField] CharactorIconHandler[] _charactersWithOverlapPossibility;
         public bool IsActive => _characterToDisplay.activeSelf;
         public bool IsActiveSpeaker { get; private set; }
-        public Action OnCharecterDisplay, OnCharacterHide;
-        public Action OnActiveSpeaker, OnActiveListner;
+        public UnityEvent OnCharecterDisplay, OnCharacterHide;
+        public UnityEvent OnActiveSpeaker, OnActiveListner;
 
         /// <summary>
         /// Displays the required character on screen

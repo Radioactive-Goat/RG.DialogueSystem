@@ -7,7 +7,7 @@ namespace RG.DialogueSystem
     /// <summary>
     /// A collestion of dialoges to create a dialog string
     /// </summary>
-    [CreateAssetMenu(fileName = "DialogCollection", menuName = "Dialog System/Dialog Collection")]
+    [CreateAssetMenu(fileName = "DialogCollection", menuName = "Dialog System/Dialog Collection", order = 0)]
     public class DialogCollection : ScriptableObject
     {
         public DialogData[] Dialogs;
