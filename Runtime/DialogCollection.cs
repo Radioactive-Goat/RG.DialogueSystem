@@ -11,6 +11,7 @@ namespace RG.DialogueSystem
     public class DialogCollection : ScriptableObject
     {
         public DialogData[] Dialogs;
+        public DialogResponseCollection FollowUpResponseCollection;
     }
 
     /// <summary>

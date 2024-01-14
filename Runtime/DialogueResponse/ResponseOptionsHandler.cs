@@ -8,6 +8,21 @@ namespace RG.DialogueSystem
 {
     public class ResponseOptionsHandler : MonoBehaviour
     {
+        #region Singleton Setup
+        public static ResponseOptionsHandler Instance;
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+        #endregion
+
         [SerializeField] GameObject _responsesUiObject;
         [SerializeField] UiResponseOption[] _uiResponseOptions;
         [SerializeField] bool _shouldLoopNavigation;

@@ -69,7 +69,14 @@ namespace RG.DialogueSystem
                 _dialogueIndex++;
                 if(_dialogueIndex >= _currentCollection.Dialogs.Length)
                 {
-                    OnCollectionEnded?.Invoke();
+                    if(_currentCollection.FollowUpResponseCollection != null)
+                    {
+                        ResponseOptionsHandler.Instance.ShowResponseOptions(_currentCollection.FollowUpResponseCollection);
+                    }
+                    else
+                    {
+                        OnCollectionEnded?.Invoke();
+                    }
                     return;
                 }
 
