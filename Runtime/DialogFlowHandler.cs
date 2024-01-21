@@ -24,8 +24,9 @@ namespace RG.DialogueSystem
 
         private DialogCollection _currentCollection;
         private int _dialogueIndex;
-        public Action OnCollectionEnded;
-        public Action OnForceEnded;
+        public event Action OnDialogChainStart;
+        public event Action OnCollectionEnded;
+        public event Action OnForceEnded;
 
         /// <summary>
         /// Playes a new dialog chain
@@ -40,6 +41,7 @@ namespace RG.DialogueSystem
             }
             SetDialogCollection(collection);
             StartDialogue();
+            OnDialogChainStart?.Invoke();
         }
 
         private void StartDialogue()
@@ -82,6 +84,14 @@ namespace RG.DialogueSystem
 
                 StartDialogue();
             }
+        }
+
+        /// <summary>
+        /// Let the flow know that the collection has ended
+        /// </summary>
+        public void InformCollectionEded()
+        {
+            OnCollectionEnded?.Invoke();
         }
 
         /// <summary>

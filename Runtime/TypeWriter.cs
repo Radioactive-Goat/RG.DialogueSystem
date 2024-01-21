@@ -30,15 +30,15 @@ namespace RG.DialogueSystem
         /// This event will be called after each letter is typed
         /// strign here is for "newTextValue"
         /// </summary>
-        public Action<string> OnTextUpdated;
+        public event Action<string> OnTextUpdated;
         /// <summary>
         /// This event will be called when the type writer starts typing
         /// </summary>
-        public Action OnStartTyping;
+        public event Action OnStartTyping;
         /// <summary>
         /// This event will be called when the type writer finshed tying the string
         /// </summary>
-        public Action OnTypingComplete;
+        public event Action OnTypingComplete;
         /// <summary>
         /// Status of the type writer
         /// </summary>

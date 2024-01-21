@@ -14,8 +14,8 @@ namespace RG.DialogueSystem
     [System.Serializable]
     public struct DialogResponseData
     {
-        public string Response;
         [TextArea(1, 3)]
+        public string Response;
         public DialogCollection FollowUpDialogues;
          
         // System.Action or Unity Event for something custom to happen when responded;

@@ -26,7 +26,8 @@ namespace RG.DialogueSystem
         [SerializeField] GameObject _responsesUiObject;
         [SerializeField] UiResponseOption[] _uiResponseOptions;
         [SerializeField] bool _shouldLoopNavigation;
-        public Action OnEndConversationResponse;
+        public event Action OnStartResponse;
+        public event Action OnEndResponse;
 
         private DialogResponseCollection _activeResponseCollection;
         private int _maxPossibleResponses;
@@ -36,6 +37,7 @@ namespace RG.DialogueSystem
         {
             _maxPossibleResponses = _uiResponseOptions.Length;
             _currentHighlightedIndex = -1;
+            _responsesUiObject.SetActive(false);
         }
 
         public void ShowResponseOptions(DialogResponseCollection responseCollection)
@@ -54,6 +56,7 @@ namespace RG.DialogueSystem
                 _uiResponseOptions[i].SetResponseText(responseCollection.Responses[i].Response);
             }
             HighlightResponseOption(0);
+            OnStartResponse?.Invoke();
             _responsesUiObject.SetActive(true);
         }
 
@@ -61,13 +64,14 @@ namespace RG.DialogueSystem
         {
             _uiResponseOptions[_currentHighlightedIndex].ConfirmOption();
             _responsesUiObject.SetActive(false);
+            OnEndResponse?.Invoke();
             if (_activeResponseCollection.Responses[_currentHighlightedIndex].FollowUpDialogues != null)
             {
                 DialogFlowHandler.Instance.StartNewDialogChain(_activeResponseCollection.Responses[_currentHighlightedIndex].FollowUpDialogues);
             }
             else
             {
-                OnEndConversationResponse?.Invoke();
+                DialogFlowHandler.Instance.InformCollectionEded();
             }
         }
 
@@ -124,6 +128,7 @@ namespace RG.DialogueSystem
             {
                 responseOption.ResetUi();
             }
+            _currentHighlightedIndex = -1;
         }
     }
 }
