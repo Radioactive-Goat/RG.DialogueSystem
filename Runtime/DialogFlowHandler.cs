@@ -24,8 +24,17 @@ namespace RG.DialogueSystem
 
         private DialogCollection _currentCollection;
         private int _dialogueIndex;
+        /// <summary>
+        /// Event called when a new dialog chain starts
+        /// </summary>
         public event Action OnDialogChainStart;
+        /// <summary>
+        /// Event called when the full collectino of dialogs and responses are completed
+        /// </summary>
         public event Action OnCollectionEnded;
+        /// <summary>
+        /// Event called when the collection is forceablily ended
+        /// </summary>
         public event Action OnForceEnded;
 
         /// <summary>

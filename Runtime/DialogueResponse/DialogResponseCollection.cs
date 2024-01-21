@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RG.DialogueSystem
 {
+    /// <summary>
+    /// A collestion of responses
+    /// </summary>
     [CreateAssetMenu(fileName = "ResponseCollection", menuName = "Dialog System/Dialog Response Collection", order = 1)]
     public class DialogResponseCollection : ScriptableObject
     {
@@ -11,6 +14,9 @@ namespace RG.DialogueSystem
         public DialogResponseData[] Responses;
     }
 
+    /// <summary>
+    /// Information needed for each response
+    /// </summary>
     [System.Serializable]
     public struct DialogResponseData
     {

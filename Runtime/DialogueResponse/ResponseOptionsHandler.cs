@@ -26,7 +26,13 @@ namespace RG.DialogueSystem
         [SerializeField] GameObject _responsesUiObject;
         [SerializeField] UiResponseOption[] _uiResponseOptions;
         [SerializeField] bool _shouldLoopNavigation;
+        /// <summary>
+        /// Even called when a response list if shown
+        /// </summary>
         public event Action OnStartResponse;
+        /// <summary>
+        /// Event called when the response list is closed
+        /// </summary>
         public event Action OnEndResponse;
 
         private DialogResponseCollection _activeResponseCollection;
@@ -40,6 +46,11 @@ namespace RG.DialogueSystem
             _responsesUiObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Shows the list of available responses based on the 
+        /// provided response collection
+        /// </summary>
+        /// <param name="responseCollection">The collection of responses to be displayed</param>
         public void ShowResponseOptions(DialogResponseCollection responseCollection)
         {
             if(responseCollection.Responses.Length > _uiResponseOptions.Length)
@@ -60,6 +71,9 @@ namespace RG.DialogueSystem
             _responsesUiObject.SetActive(true);
         }
 
+        /// <summary>
+        /// Selected the highlighted response as the useres choice
+        /// </summary>
         public void SelectResponse()
         {
             _uiResponseOptions[_currentHighlightedIndex].ConfirmOption();
@@ -75,6 +89,9 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Navigate through the list by one click down
+        /// </summary>
         public void NavigateUp()
         {
             int newHighlight = _currentHighlightedIndex - 1;
@@ -92,6 +109,9 @@ namespace RG.DialogueSystem
             HighlightResponseOption(newHighlight);
         }
 
+        /// <summary>
+        /// Navigate through the list by one click up
+        /// </summary>
         public void NavigateDown()
         {
             int newHighlight = _currentHighlightedIndex + 1;
@@ -122,6 +142,9 @@ namespace RG.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Resets the Ui of all the items on the response list
+        /// </summary>
         public void ResetResponsesUI()
         {
             foreach (UiResponseOption responseOption in _uiResponseOptions)
