@@ -12,6 +12,7 @@ namespace RG.DialogueSystem
     {
         public DialogData[] Dialogs;
         public DialogResponseCollection FollowUpResponseCollection;
+        public IDialogSystemEvents DialogChainEvent;
     }
 
     /// <summary>

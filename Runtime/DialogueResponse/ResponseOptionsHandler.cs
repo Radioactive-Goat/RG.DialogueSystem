@@ -79,13 +79,26 @@ namespace RG.DialogueSystem
             _uiResponseOptions[_currentHighlightedIndex].ConfirmOption();
             _responsesUiObject.SetActive(false);
             OnEndResponse?.Invoke();
-            if (_activeResponseCollection.Responses[_currentHighlightedIndex].FollowUpDialogues != null)
+            DialogResponseData responseData = _activeResponseCollection.Responses[_currentHighlightedIndex];
+            if (responseData.FollowUpDialogues != null)
             {
-                DialogFlowHandler.Instance.StartNewDialogChain(_activeResponseCollection.Responses[_currentHighlightedIndex].FollowUpDialogues);
+                if (responseData.DialogResponseEvent != null)
+                {
+                    responseData.DialogResponseEvent.InvokeEvent();
+                }
+                DialogFlowHandler.Instance.StartNewDialogChain(responseData.FollowUpDialogues);
             }
             else
             {
-                DialogFlowHandler.Instance.InformCollectionEded();
+                if (responseData.DialogResponseEvent != null && responseData.DialogResponseEvent.PlayOnBeforeEndedEvent)
+                {
+                    responseData.DialogResponseEvent.InvokeEvent();
+                }
+                DialogFlowHandler.Instance.InformCollectionEnded();
+                if (responseData.DialogResponseEvent != null && !responseData.DialogResponseEvent.PlayOnBeforeEndedEvent)
+                {
+                    responseData.DialogResponseEvent.InvokeEvent();
+                }
             }
         }
 

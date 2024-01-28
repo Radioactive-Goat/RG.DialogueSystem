@@ -82,11 +82,23 @@ namespace RG.DialogueSystem
                 {
                     if(_currentCollection.FollowUpResponseCollection != null)
                     {
+                        if (_currentCollection.DialogChainEvent != null)
+                        {
+                            _currentCollection.DialogChainEvent.InvokeEvent();
+                        }
                         ResponseOptionsHandler.Instance.ShowResponseOptions(_currentCollection.FollowUpResponseCollection);
                     }
                     else
                     {
+                        if (_currentCollection.DialogChainEvent != null && _currentCollection.DialogChainEvent.PlayOnBeforeEndedEvent)
+                        {
+                            _currentCollection.DialogChainEvent.InvokeEvent();
+                        }
                         OnCollectionEnded?.Invoke();
+                        if (_currentCollection.DialogChainEvent != null && !_currentCollection.DialogChainEvent.PlayOnBeforeEndedEvent)
+                        {
+                            _currentCollection.DialogChainEvent.InvokeEvent();
+                        }
                     }
                     return;
                 }
@@ -98,7 +110,7 @@ namespace RG.DialogueSystem
         /// <summary>
         /// Let the flow know that the collection has ended
         /// </summary>
-        public void InformCollectionEded()
+        public void InformCollectionEnded()
         {
             OnCollectionEnded?.Invoke();
         }

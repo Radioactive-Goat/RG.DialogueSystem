@@ -23,6 +23,7 @@ namespace RG.DialogueSystem
         [TextArea(1, 3)]
         public string Response;
         public DialogCollection FollowUpDialogues;
+        public IDialogSystemEvents DialogResponseEvent;
          
         // System.Action or Unity Event for something custom to happen when responded;
         // But not adding yet as I am not sure how the user will attach this event easily as it lives
