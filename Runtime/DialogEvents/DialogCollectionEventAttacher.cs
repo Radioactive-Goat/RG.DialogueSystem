@@ -9,12 +9,7 @@ namespace RG.DialogueSystem
     public class DialogCollectionEventAttacher : MonoBehaviour, IDialogSystemEvents
     {
         [SerializeField] DialogCollection _connectEventTo;
-
-        [field: SerializeField]
-        [Tooltip("If event should be invoked before or after the on end event is triggered")]
-        public bool PlayOnBeforeEndedEvent { get; private set; }
-        [SerializeField]
-        UnityEvent _dialogEvent;
+        [SerializeField] UnityEvent _dialogEvent;
 
         private void Start()
         {

@@ -11,12 +11,7 @@ namespace RG.DialogueSystem
         [SerializeField]
         [Tooltip("The indexes of the respones on the response collection that need this event to be added to")]
         uint[] _connectEventTo;
-
-        [field: SerializeField]
-        [Tooltip("If event should be invoked before or after the on end request is sent to the dialog collection")]
-        public bool PlayOnBeforeEndedEvent { get; private set; }
-        [SerializeField]
-        UnityEvent _responseEvent;
+        [SerializeField] UnityEvent _responseEvent;
 
         private void Start()
         {

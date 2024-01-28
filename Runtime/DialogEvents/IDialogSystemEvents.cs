@@ -6,7 +6,6 @@ namespace RG.DialogueSystem
 {
     public interface IDialogSystemEvents
     {
-        bool PlayOnBeforeEndedEvent { get; }
         void InvokeEvent();
     }
 }

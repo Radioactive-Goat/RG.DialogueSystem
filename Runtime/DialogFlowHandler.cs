@@ -90,15 +90,11 @@ namespace RG.DialogueSystem
                     }
                     else
                     {
-                        if (_currentCollection.DialogChainEvent != null && _currentCollection.DialogChainEvent.PlayOnBeforeEndedEvent)
+                        if (_currentCollection.DialogChainEvent != null)
                         {
                             _currentCollection.DialogChainEvent.InvokeEvent();
                         }
                         OnCollectionEnded?.Invoke();
-                        if (_currentCollection.DialogChainEvent != null && !_currentCollection.DialogChainEvent.PlayOnBeforeEndedEvent)
-                        {
-                            _currentCollection.DialogChainEvent.InvokeEvent();
-                        }
                     }
                     return;
                 }
