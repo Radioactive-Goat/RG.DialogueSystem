@@ -8,21 +8,6 @@ namespace RG.DialogueSystem
 {
     public class ResponseOptionsHandler : MonoBehaviour
     {
-        #region Singleton Setup
-        public static ResponseOptionsHandler Instance;
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(this);
-            }
-        }
-        #endregion
-
         [SerializeField] GameObject _responsesUiObject;
         [SerializeField] UiResponseOption[] _uiResponseOptions;
         [SerializeField] bool _shouldLoopNavigation;
@@ -61,7 +46,7 @@ namespace RG.DialogueSystem
 
             ResetResponsesUI();
             _activeResponseCollection = responseCollection;
-            CharactorDisplayHandler.Instance.DisplayCharactor(_activeResponseCollection.RespondingCharactor);
+            DialogueSystemRefs.Instance.CharactorDisplayHandler.DisplayCharactor(_activeResponseCollection.RespondingCharactor);
             for (int i = 0; i < responseCollection.Responses.Length; i++)
             {
                 _uiResponseOptions[i].SetResponseText(responseCollection.Responses[i].Response);
@@ -86,7 +71,7 @@ namespace RG.DialogueSystem
                 {
                     responseData.DialogResponseEvent.InvokeEvent();
                 }
-                DialogFlowHandler.Instance.StartNewDialogChain(responseData.FollowUpDialogues);
+                DialogueSystemRefs.Instance.DialogFlowHandler.StartNewDialogChain(responseData.FollowUpDialogues);
             }
             else
             {
@@ -94,7 +79,7 @@ namespace RG.DialogueSystem
                 {
                     responseData.DialogResponseEvent.InvokeEvent();
                 }
-                DialogFlowHandler.Instance.InformCollectionEnded();
+                DialogueSystemRefs.Instance.DialogFlowHandler.InformCollectionEnded();
             }
         }
 

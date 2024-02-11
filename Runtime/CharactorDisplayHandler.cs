@@ -11,21 +11,6 @@ namespace RG.DialogueSystem
     /// </summary>
     public class CharactorDisplayHandler : MonoBehaviour
     {
-        #region Singleton Setup
-        public static CharactorDisplayHandler Instance;
-        private void Awake()
-        {
-            if(Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(this);
-            }
-        }
-        #endregion
-
         [SerializeField] CharactorData[] _allCharactorsData;
         [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] string _nameSuperFix = ":";

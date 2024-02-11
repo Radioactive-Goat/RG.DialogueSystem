@@ -7,21 +7,7 @@ namespace RG.DialogueSystem
 {
     public class DialogFlowHandler : MonoBehaviour
     {
-        #region Singleton Setup
-        public static DialogFlowHandler Instance;
-        private void Awake()
-        {
-            if(Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(this);
-            }
-        }
-        #endregion
-
+        private TypeWriter _typeWriter;
         private DialogCollection _currentCollection;
         private int _dialogueIndex;
         /// <summary>
@@ -36,6 +22,11 @@ namespace RG.DialogueSystem
         /// Event called when the collection is forceablily ended
         /// </summary>
         public event Action OnForceEnded;
+
+        private void Start()
+        {
+            _typeWriter = DialogueSystemRefs.Instance.TypeWriter;
+        }
 
         /// <summary>
         /// Playes a new dialog chain
@@ -55,8 +46,8 @@ namespace RG.DialogueSystem
 
         private void StartDialogue()
         {
-            CharactorDisplayHandler.Instance?.DisplayCharactor(_currentCollection.Dialogs[_dialogueIndex].Charactor);
-            TypeWriter.Instance.StartTypeWriter(_currentCollection.Dialogs[_dialogueIndex].Dialogue);
+            DialogueSystemRefs.Instance.CharactorDisplayHandler?.DisplayCharactor(_currentCollection.Dialogs[_dialogueIndex].Charactor);
+            _typeWriter.StartTypeWriter(_currentCollection.Dialogs[_dialogueIndex].Dialogue);
         }
 
         /// <summary>
@@ -75,7 +66,7 @@ namespace RG.DialogueSystem
         /// </summary>
         public void NextDialogue()
         {
-            if(!TypeWriter.Instance.IsTyping)
+            if(!_typeWriter.IsTyping)
             {
                 _dialogueIndex++;
                 if(_dialogueIndex >= _currentCollection.Dialogs.Length)
@@ -86,7 +77,7 @@ namespace RG.DialogueSystem
                         {
                             _currentCollection.DialogChainEvent.InvokeEvent();
                         }
-                        ResponseOptionsHandler.Instance.ShowResponseOptions(_currentCollection.FollowUpResponseCollection);
+                        DialogueSystemRefs.Instance.ResponseOptionsHandler.ShowResponseOptions(_currentCollection.FollowUpResponseCollection);
                     }
                     else
                     {
@@ -116,7 +107,7 @@ namespace RG.DialogueSystem
         /// </summary>
         public void ForceEndCollection()
         {
-            TypeWriter.Instance.StopTypeWriter();
+            _typeWriter.StopTypeWriter();
             OnForceEnded?.Invoke();
         }
     }
